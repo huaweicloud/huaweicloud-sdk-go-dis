@@ -135,9 +135,8 @@ func getScope(time string, util *Util) string {
 *返回值：v4鉴权的Credential值
  */
 func getCredenttial(util *Util) string {
-	t := time.Now()
-	date := t.Format("2006-01-02")
-	credenttial := util.rawAK + "/" + strings.Replace(date, "-", "", -1) + "/" + util.region + "/dis/sdk_request"
+	date := util.request.Header.Get("x-sdk-date")
+	credenttial := util.rawAK + "/" + getScope(date, util)
 	return credenttial
 }
 
