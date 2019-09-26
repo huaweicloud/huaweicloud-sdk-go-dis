@@ -54,7 +54,7 @@ set http_proxy=http://{username}:{password}@{host}:{port}
 set https_proxy=http://{username}:{password}@{host}:{port}
 ```
 
-###### 3. linux设置代理服务器
+##### 3. linux设置代理服务器
 ``` shell
 export http_proxy=http://{username}:{password}@{host}:{port}
 export https_proxy=http://{username}:{password}@{host}:{port}
