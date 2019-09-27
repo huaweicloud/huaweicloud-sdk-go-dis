@@ -38,3 +38,25 @@ linux：下载protoc-3.3.0-linux-x86_64.zip或protoc-3.3.0-linux-x86_32.zip解�
 ##### 2. 获取protobuf的编译器插件protoc-gen-go
 
 进入GOPATH目录运行: go get -u github.com/golang/protobuf/protoc-gen-go， 如果成功会在GOPATH/bin下生成protoc-gen-go.exe文件。
+
+#### 2.1.4 使用代理
+
+##### 1. liteIDE下设置代理服务器, 点击`工具`-`编辑当前环境`, 添加如下两行
+``` shell
+http_proxy="http://{username}:{password}@{host}:{port}"
+https_proxy="http://{username}:{password}@{host}:{port}"
+# {username}, {password}, {host}, {port} 都需要使用URL编码
+```
+
+##### 2. windows设置代理服务器
+``` shell
+set http_proxy=http://{username}:{password}@{host}:{port}
+set https_proxy=http://{username}:{password}@{host}:{port}
+```
+
+##### 3. linux设置代理服务器
+``` shell
+export http_proxy=http://{username}:{password}@{host}:{port}
+export https_proxy=http://{username}:{password}@{host}:{port}
+```
+

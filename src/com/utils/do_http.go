@@ -21,6 +21,7 @@ import (
 	"com/models"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/json"
 	"errors"
 	"io"
 	"io/ioutil"
@@ -32,7 +33,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"encoding/json"
 )
 
 const (
@@ -75,7 +75,7 @@ var caCrt []byte = nil        //https数字证书
  */
 func NewUtil(ak, sk, reg, auth, raw_ak, raw_sk, endpoint string, pathStyle bool) *Util {
 	util := &Util{ak: ak, sk: sk, region: reg, authType: auth, rawAK: raw_ak, rawSK: raw_sk, endpoint: endpoint, pathStyle: pathStyle}
-	util.pathMap =  make(map[string]string)
+	util.pathMap = make(map[string]string)
 	return util
 }
 
@@ -239,7 +239,7 @@ func (util *Util) BackupRequestBody(body []byte, sourceFile string) {
 func (util *Util) getPath() (error, string) {
 	ser := strings.Split(util.endpoint, "//")
 	if len(ser) != 2 || (ser[0] != "https:" && ser[0] != "http:") {
-		logger.LOG(logger.ERROR, "the server address is err:" + util.endpoint)
+		logger.LOG(logger.ERROR, "the server address is err:"+util.endpoint)
 		err := errors.New("the server address is err:" + util.endpoint)
 		return err, ""
 	}
@@ -253,13 +253,12 @@ func (util *Util) getPath() (error, string) {
 
 	for _, v := range util.resourceMap {
 		if v[0] != "" {
-			path += "/" +v[0]
+			path += "/" + v[0]
 		}
 		if v[1] != "" {
 			path += "/" + v[1]
 		}
 	}
-
 
 	i := 0
 	for key, value := range util.pathMap {
@@ -307,7 +306,7 @@ func (util *Util) refreshRequest() error {
  */
 func (util *Util) getTransport() *http.Transport {
 	dial := func(netw, addr string) (net.Conn, error) {
-		con, err := net.DialTimeout(netw, addr, time.Second * time.Duration(connectTimeOut))
+		con, err := net.DialTimeout(netw, addr, time.Second*time.Duration(connectTimeOut))
 		if err != nil {
 			return nil, err
 		}
@@ -323,16 +322,31 @@ func (util *Util) getTransport() *http.Transport {
 		}
 		pool := x509.NewCertPool()
 		pool.AppendCertsFromPEM(caCrt)
-		return &http.Transport{
-			TLSClientConfig:    &tls.Config{RootCAs: pool, InsecureSkipVerify: skipVerify},
-			DisableCompression: true,
-			Dial:               dial,
+
+		transport := &http.Transport{
+			TLSClientConfig:       &tls.Config{RootCAs: pool, InsecureSkipVerify: skipVerify},
+			DisableCompression:    true,
+			Dial:                  dial,
 			ResponseHeaderTimeout: time.Second * time.Duration(responseTimeOut),
 		}
-	}
-	return &http.Transport{
-		Dial: dial,
-		ResponseHeaderTimeout: time.Second * time.Duration(responseTimeOut),
+
+		if os.Getenv("https_proxy") != "" {
+			proxyUrl, _ := url.Parse(os.Getenv("https_proxy"))
+			transport.Proxy = http.ProxyURL(proxyUrl)
+		}
+		return transport
+
+	} else {
+		transport := &http.Transport{
+			Dial:                  dial,
+			ResponseHeaderTimeout: time.Second * time.Duration(responseTimeOut),
+		}
+		if os.Getenv("http_proxy") != "" {
+
+			proxyUrl, _ := url.Parse(os.Getenv("http_proxy"))
+			transport.Proxy = http.ProxyURL(proxyUrl)
+		}
+		return transport
 	}
 }
 
@@ -353,7 +367,7 @@ func (util *Util) doHttp() error {
 		if err == nil && util.Response.StatusCode < 500 {
 			break
 		}
-		if i == int(reConnectNum) - 1 {
+		if i == int(reConnectNum)-1 {
 			break
 		}
 		if err != nil {
@@ -424,8 +438,6 @@ func ParseJson(body []byte, obj interface{}) error {
 	return err
 }
 
-
-
 /**
 *函数说明：设置网络超时
 *入参：second：超时时间，秒
@@ -460,7 +472,7 @@ func SetCaCertificate(isCrt bool, crtPath string) error {
 		caCrt, err = ioutil.ReadFile(crtPath)
 		if err != nil {
 			caCrt = nil
-			logger.LOG(logger.ERROR, "read the SSL certificate failed,error:" + err.Error())
+			logger.LOG(logger.ERROR, "read the SSL certificate failed,error:"+err.Error())
 			return err
 		}
 	}
