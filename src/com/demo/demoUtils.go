@@ -7,6 +7,7 @@ import "com/client"
 type DISInstance struct {
 	Dis            *client.Client //初始化服务类工厂
 
+	StreamId       string 		  // 通道ID
 	StreamName     string         // 配置流名称
 	PartitionId    string         //获取迭代器时需指定分区ID
 

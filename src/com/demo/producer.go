@@ -35,6 +35,7 @@ func PutRecords(disInstance DISInstance) (string, string) {
 	}
 
 	input := &models.PutRecordsRequest{
+		StreamId: disInstance.StreamId,
 		StreamName: disInstance.StreamName,
 		Records: putRecordsRequestEntrys,
 	}

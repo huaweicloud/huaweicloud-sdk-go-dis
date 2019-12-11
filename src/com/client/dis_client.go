@@ -542,6 +542,7 @@ func (client *Client) PutRecords(input *models.PutRecordsRequest) (*models.Resul
 
 func (client *Client) innerPutRecordsSupportingCache(input *models.PutRecordsRequest) (*models.Result, *models.PutRecordsResult) {
 	putRecordsReq := &models.PutRecordsRequest{
+		StreamId: input.StreamId,
 		StreamName: input.StreamName,
 		Records: input.Records,
 	}
@@ -578,6 +579,7 @@ func (client *Client) innerPutRecordsWithRetry(input *models.PutRecordsRequest) 
 	var putRecordsResult *models.PutRecordsResult
 	var result *models.Result
 	retryPutRecordsRequest := &models.PutRecordsRequest{
+		StreamId: input.StreamId,
 		StreamName: input.StreamName,
 		Records: input.Records,
 	}

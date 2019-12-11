@@ -433,8 +433,9 @@ type Record struct {
 
 //上传数据请求
 type PutRecordsRequest struct {
-	StreamName string `json:"stream_name"`               //通道名称
-	Records    []PutRecordsRequestEntry `json:"records"` //记录列表
+	StreamName string                   `json:"stream_name"` // 通道名称
+	StreamId   string                   `json:"stream_id"`   // 通道ID，用于授权访问， 与 StreamName 二选一
+	Records    []PutRecordsRequestEntry `json:"records"`     // 记录列表
 }
 
 //记录列表
