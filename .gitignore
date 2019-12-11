@@ -1,0 +1,8 @@
+.idea
+
+*.log
+*.out
+*.iml
+
+src/github.com/golang/protobuf/
+bin/

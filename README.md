@@ -31,7 +31,7 @@ Go语言开发工具比较多，根据自己需要和习惯选择，此处以lit
 
 ##### 1. 下载protobuf的编译器protoc，[下载地址](https://github.com/google/protobuf/releases)
 
-window：下载protoc-3.3.0-win32.zip解压，把bin目录下的protoc.exe复制到GOPATH/bin下，GOPATH/bin加入环境变量。
+window：下载protoc-3.3.0-win32.zip解压，把bin目录下的protoc.exe复制到GOROOT/bin下，GOPATH/bin加入环境变量。
 
 linux：下载protoc-3.3.0-linux-x86_64.zip或protoc-3.3.0-linux-x86_32.zip解压，把bin目录下的protoc复制到GOPATH/bin下，GOPATH/bin加入环境变量。
 
