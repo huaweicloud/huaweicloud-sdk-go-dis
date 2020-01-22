@@ -752,3 +752,24 @@ func isRecordsRetriableErrorCode(errorCode string) bool {
 	return false
 }
 
+func (client *Client) PutRecordsXtoken(input *models.PutRecordsRequest, token string) (*models.Result, *models.PutRecordsResult) {
+	logger.LOG(logger.INFO, "enter PutRecordsRequest...")
+	dis := getRequest(POST, client.projectId)
+	setDisURI("records", "", dis)
+	setDisHeader("X-Security-Token", token, dis)
+
+	inputbytes, err := json.Marshal(input)
+	if nil != err {
+		logger.LOG(logger.ERROR, "parameter error ", err)
+	}
+	util, r := client.connectDisWithXml(dis, string(inputbytes))
+	if r == nil {
+		output := new(models.PutRecordsResult)
+		if ret := client.getResponseWithOutput(util, output); ret.Err != nil {
+			return ret, nil
+		} else {
+			return ret, output
+		}
+	}
+	return r, nil
+}
