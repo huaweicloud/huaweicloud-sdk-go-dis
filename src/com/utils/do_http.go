@@ -132,9 +132,6 @@ func (util *Util) InitConect(mothed, projectId string, resourceMap [][]string, i
  */
 func (util *Util) DoExec() (*http.Response, *models.Result) {
 	if util.request.Header.Get("Authorization") == "" {
-		if "V2" == util.authType {
-			util.request.Header.Set("Authorization", signatureS3(util))
-		}
 		if "V4" == util.authType {
 			util.request.Header.Set("Authorization", signatureS3_v4(util))
 		}

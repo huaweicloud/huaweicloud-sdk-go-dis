@@ -16,9 +16,7 @@
 package utils
 
 import (
-	"crypto/hmac"
 	"crypto/md5"
-	"crypto/sha1"
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
@@ -28,23 +26,6 @@ import (
 	"strings"
 	"time"
 )
-
-/**
-*函数说明：构造v2鉴权的signature值
-*入参：stringToSign:stringToSign值
-* 	 SK：用户的SecretAccessKeyID
-*返回值：构造v2鉴权的signature值
- */
-func signatureS3(util *Util) string {
-	de_ak := Decrypto([]byte(util.ak), "ak")
-	de_sk := Decrypto([]byte(util.sk), "sk")
-	//	sign := "AWS " + util.ak + ":"
-	//	hashed := hmacSHA1([]byte(util.sk), stringToSignS3(util))
-	sign := "AWS " + de_ak + ":"
-	hashed := hmacSHA1([]byte(de_sk), stringToSignS3(util))
-	sign += base64.StdEncoding.EncodeToString(hashed)
-	return sign
-}
 
 /**
 *函数说明：构造v2鉴权的stringToSign值
@@ -158,19 +139,6 @@ func canonicalResourceS3(util *Util) string {
  */
 func timestampS3() string {
 	return now().Format(TIME_FORMAT_S3)
-}
-
-/**
-
-*函数说明：hmacSHA1加密
-*入参：key:加密的key值
-*     content加密的字符串
-*返回值：加密后的值
- */
-func hmacSHA1(key []byte, content string) []byte {
-	mac := hmac.New(sha1.New, key)
-	mac.Write([]byte(content))
-	return mac.Sum(nil)
 }
 
 /**

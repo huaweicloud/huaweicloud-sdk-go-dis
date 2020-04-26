@@ -554,7 +554,7 @@ type CacheResendConf struct {
 
 func DefaultCacheResendConf() *CacheResendConf {
 	return &CacheResendConf{
-		DataCacheEnable:true,
+		DataCacheEnable:false,
 		DataCacheDir: PROPERTY_DATA_CACHE_DIR,
 		DataCacheDiskMaxSize: PROPERTY_DATA_CACHE_DISK_MAX_SIZE,
 		DataCacheArchiveSize:PROPERTY_DATA_CACHE_ARCHIVE_MAX_SIZE,
